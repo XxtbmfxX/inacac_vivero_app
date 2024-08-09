@@ -13,13 +13,18 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.t_o_r_o.vivero_app",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +36,17 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "7b50f98c-60ab-47ec-9afa-e8d14223bdd4"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7b50f98c-60ab-47ec-9afa-e8d14223bdd4"
     }
   }
 }
