@@ -3,43 +3,47 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   safeViewStyle: {
     flex: 1,
+    gap: 20,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
   },
 
   CardStyle: {
     flex: 1,
-    width: 300,
-    backgroundColor: "#fff",
+    gap: 10,
     padding: 20,
-    margin: 10,
+    height: "auto",
+    minWidth: 350,
+    width: "90%",
     borderRadius: 10,
+    marginVertical: 40,
+    backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    elevation: 5,
   },
 
-  cardText: {
+  CardTitleText: {
+    fontSize: 20,
+  },
+
+  CardDescriptionText: {
     fontSize: 16,
-    marginBottom: 10,
   },
 
-
-    column: {
+  column: {
     flex: 1,
-    backgroundColor: "#f0f0f0", // color de fondo opcional para visualizar las columnas
-    margin: 5, // margen opcional para separar las columnas
+    backgroundColor: "#f0f0f0",
+    margin: 5,
   },
 
   container: {
-        flex: 1,
-        flexDirection: "row",
+    flex: 1,
+    flexDirection: "row",
     padding: 20,
-
-      },
+  },
 
   input: {
     borderColor: "#ccc",

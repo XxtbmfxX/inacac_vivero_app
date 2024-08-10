@@ -1,17 +1,17 @@
-import { View, Text, FlatList } from "react-native";
+import { Text, FlatList } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "@/constants/styles";
 import { useSupabaseData } from "@/context/supabseDataContext";
 import { Link } from "expo-router";
 import LoadingScreen from "@/components/Animations/LoadingAnimation";
-import CardMaterial from "@/components/Cards/CardMateriales";
+import CardQuímico from "@/components/Cards/CardQuímicos";
 
 const index = () => {
-  const { materiales, fetchMateriales } = useSupabaseData();
+  const { químicos, fetchQuímicos } = useSupabaseData();
 
   useEffect(() => {
-    fetchMateriales();
+    fetchQuímicos();
   }, []);
 
   return (
@@ -19,11 +19,11 @@ const index = () => {
       <Link href={"/bodega"}>
         <Text>Volver a Bodega</Text>
       </Link>
-      {materiales ? (
+      {químicos ? (
         <FlatList
-          data={materiales}
-          renderItem={({ item }) => <CardMaterial material={item} />}
-          keyExtractor={(item) => item.id_material}
+          data={químicos}
+          renderItem={({ item }) => <CardQuímico químico={item} />}
+          keyExtractor={(item) => item.id_químico}
         />
       ) : (
         <LoadingScreen />

@@ -8,39 +8,38 @@ import { formatearFecha } from "@/constants/Utils";
 // timestamp without time zone
 // character varying
 
-type CardSemillasObject = {
-  id_semilla: string;
-  cantidad: string;
-  fecha_recepcion: Date;
-  fecha_colecta: Date;
-  porcentaje_germinacion: string;
-  peso_enviado: string;
-  peso_recibido: string;
-  condicion_semilla: string;
-  id_especie: string;
-  id_procedencia: string;
-  especie: { nombre_especie: string };
-  procedencia: { nombre_procedencia: string };
-  id_bodega: string;
-  rut_colector: string;
-  Peso_100_semillas: string;
+type CardQuímicoObject = {
+  id_químico: string;
+  fecha_ingreso: Date;
+  contenido: string;
+  nombre: string;
+  id_categoría: number;
+  categoría: { nombre_categoría: string };
+  etiqueta: { color_etiqueta: string };
+  id_etiqueta: number;
+  presentacion: string;
+  stock_minimo: number;
+  necesidades: string;
 };
 
-interface CardSemillasProps {
-  semilla: CardSemillasObject;
+interface CardQuímicosProps {
+  químico: CardQuímicoObject;
 }
 
 /**
  * Requiere de queries para la base de datos
- * @param CardSemillasProps
+ * @param CardQuímicosProps
  * @returns
  */
-const CardSemillas = ({ semilla }: CardSemillasProps) => {
-  const clavesExcluidas = ["id_semilla", "id_especie", "id_procedencia"];
+const CardQuímico = ({ químico }: CardQuímicosProps) => {
+console.log(químico.etiqueta)
+  
+
+  const clavesExcluidas = ["id_categoría", "id_etiqueta"];
 
   return (
     <View style={styles.CardStyle}>
-      {Object.entries(semilla)
+      {Object.entries(químico)
         .filter(([clave]) => !clavesExcluidas.includes(clave))
         .map(([clave, valor]) => {
           // Aplicar formateo de fecha solo en las claves que corresponden a fechas
@@ -67,4 +66,4 @@ const CardSemillas = ({ semilla }: CardSemillasProps) => {
   );
 };
 
-export default CardSemillas;
+export default CardQuímico;

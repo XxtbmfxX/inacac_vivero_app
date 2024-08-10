@@ -20,17 +20,23 @@ type SupabaseDataContextProps = {
   deleteMaterial: (id: number) => Promise<void>;
 };
 
-const SupabaseDataContext = createContext<SupabaseDataContextProps | undefined>(undefined);
+const SupabaseDataContext = createContext<SupabaseDataContextProps | undefined>(
+  undefined
+);
 
 export const useSupabaseData = () => {
   const context = useContext(SupabaseDataContext);
   if (!context) {
-    throw new Error("useSupabaseData debe ser usado dentro de un SupabaseDataProvider");
+    throw new Error(
+      "useSupabaseData debe ser usado dentro de un SupabaseDataProvider"
+    );
   }
   return context;
 };
 
-export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { session } = useSupabase(); // Accede a la sesión desde el contexto de Supabase
   const [semillas, setSemillas] = useState<any[]>([]);
   const [químicos, setQuímicos] = useState<any[]>([]);
@@ -39,7 +45,9 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ 
   // Fetch Functions
   const fetchSemillas = async () => {
     if (!session) return;
-    const { data, error } = await supabase.from("semilla").select("*");
+    const { data, error } = await supabase
+      .from("semilla")
+      .select("*, especie (nombre_especie), procedencia (nombre_procedencia)");
     if (error) {
       console.error("Error fetching semillas:", error);
       return;
@@ -49,7 +57,9 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const fetchQuímicos = async () => {
     if (!session) return;
-    const { data, error } = await supabase.from("químicos").select("*");
+    const { data, error } = await supabase
+      .from("químico")
+      .select("*, categoría (nombre_categoría), etiqueta (color_etiqueta)");
     if (error) {
       console.error("Error fetching químicos:", error);
       return;
@@ -59,7 +69,7 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const fetchMateriales = async () => {
     if (!session) return;
-    const { data, error } = await supabase.from("materiales").select("*");
+    const { data, error } = await supabase.from("material").select("*");
     if (error) {
       console.error("Error fetching materiales:", error);
       return;
@@ -121,7 +131,10 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const updateMaterial = async (id: number, data: any) => {
     if (!session) return;
-    const { error } = await supabase.from("materiales").update(data).eq("id", id);
+    const { error } = await supabase
+      .from("materiales")
+      .update(data)
+      .eq("id", id);
     if (error) {
       console.error("Error updating material:", error);
     } else {
@@ -160,7 +173,6 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   };
 
- 
   return (
     <SupabaseDataContext.Provider
       value={{
