@@ -7,23 +7,24 @@ import { Link } from "expo-router";
 import LoadingScreen from "@/components/Animations/LoadingAnimation";
 import CommonCard from "@/components/Cards/CommonCard";
 
-const index = () => {
-  const { químicos, fetchQuímicos } = useSupabaseData();
+const plantacion = () => {
+  const { plantación, fetchPlantación } = useSupabaseData();
 
   useEffect(() => {
-    fetchQuímicos();
+    fetchPlantación();
   }, []);
+
 
   return (
     <SafeAreaView style={styles.safeViewStyle}>
       <Link href={"/bodega"}>
         <Text>Volver a Bodega</Text>
       </Link>
-      {químicos ? (
+      {plantación ? (
         <FlatList
-          data={químicos}
+          data={plantación}
           renderItem={({ item }) => <CommonCard item={item} />}
-          keyExtractor={(item) => item.id_químico}
+          keyExtractor={(item) => item.id_plantación}
         />
       ) : (
         <LoadingScreen />
@@ -32,4 +33,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default plantacion;

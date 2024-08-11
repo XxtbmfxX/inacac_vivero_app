@@ -5,7 +5,7 @@ import { styles } from "@/constants/styles";
 import { useSupabaseData } from "@/context/supabseDataContext";
 import { Link } from "expo-router";
 import LoadingScreen from "@/components/Animations/LoadingAnimation";
-import CardMaterial from "@/components/Cards/CardMateriales";
+import CommonCard from "@/components/Cards/CommonCard";
 
 const index = () => {
   const { materiales, fetchMateriales } = useSupabaseData();
@@ -22,7 +22,7 @@ const index = () => {
       {materiales ? (
         <FlatList
           data={materiales}
-          renderItem={({ item }) => <CardMaterial material={item} />}
+          renderItem={({ item }) => <CommonCard item={item} />}
           keyExtractor={(item) => item.id_material}
         />
       ) : (

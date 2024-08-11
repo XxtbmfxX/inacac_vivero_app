@@ -6,18 +6,33 @@ type SupabaseDataContextProps = {
   semillas: any[];
   químicos: any[];
   materiales: any[];
+  tareas: any[];
+  plantas: any[];
+  plantación: any[];
   fetchSemillas: () => Promise<void>;
   fetchQuímicos: () => Promise<void>;
   fetchMateriales: () => Promise<void>;
+  fetchTareas: () => Promise<void>;
+  fetchPlanta: () => Promise<void>;
+  fetchPlantación: () => Promise<void>;
   addSemilla: (data: any) => Promise<void>;
   addQuímico: (data: any) => Promise<void>;
   addMaterial: (data: any) => Promise<void>;
+  addTarea: (data: any) => Promise<void>;
+  addPlanta: (data: any) => Promise<void>;
+  addPlantación: (data: any) => Promise<void>;
   updateSemilla: (id: number, data: any) => Promise<void>;
   updateQuímico: (id: number, data: any) => Promise<void>;
   updateMaterial: (id: number, data: any) => Promise<void>;
+  updateTarea: (id: number, data: any) => Promise<void>;
+  updatePlanta: (id: number, data: any) => Promise<void>;
+  updatePlantación: (id: number, data: any) => Promise<void>;
   deleteSemilla: (id: number) => Promise<void>;
   deleteQuímico: (id: number) => Promise<void>;
   deleteMaterial: (id: number) => Promise<void>;
+  deleteTarea: (id: number) => Promise<void>;
+  deletePlanta: (id: number) => Promise<void>;
+  deletePlantación: (id: number) => Promise<void>;
 };
 
 const SupabaseDataContext = createContext<SupabaseDataContextProps | undefined>(
@@ -41,6 +56,9 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const [semillas, setSemillas] = useState<any[]>([]);
   const [químicos, setQuímicos] = useState<any[]>([]);
   const [materiales, setMateriales] = useState<any[]>([]);
+  const [tareas, setTareas] = useState<any[]>([]);
+  const [plantas, setPlantas] = useState<any[]>([]);
+  const [plantación, setPlantación] = useState<any[]>([]);
 
   // Fetch Functions
   const fetchSemillas = async () => {
@@ -77,6 +95,38 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
     setMateriales(data || []);
   };
 
+  const fetchTareas = async () => {
+    if (!session) return;
+    const { data, error } = await supabase.from("tarea").select("*");
+    if (error) {
+      console.error("Error fetching tareas:", error);
+      return;
+    }
+    setTareas(data || []);
+  };
+
+  const fetchPlanta = async () => {
+    if (!session) return;
+    const { data, error } = await supabase
+      .from("planta")
+      .select("*, especie (nombre_especie)");
+    if (error) {
+      console.error("Error fetching tareas:", error);
+      return;
+    }
+    setPlantas(data || []);
+  };
+
+  const fetchPlantación = async () => {
+    if (!session) return;
+    const { data, error } = await supabase.from("plantación").select("*");
+    if (error) {
+      console.error("Error fetching tareas:", error);
+      return;
+    }
+    setPlantación(data || []);
+  };
+
   // Add Functions
   const addSemilla = async (data: any) => {
     if (!session) return;
@@ -105,6 +155,36 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error("Error adding material:", error);
     } else {
       fetchMateriales(); // Refresh after adding
+    }
+  };
+
+  const addTarea = async (data: any) => {
+    if (!session) return;
+    const { error } = await supabase.from("tarea").insert(data);
+    if (error) {
+      console.error("Error adding tarea:", error);
+    } else {
+      fetchTareas(); // Refresh after adding
+    }
+  };
+
+  const addPlanta = async (data: any) => {
+    if (!session) return;
+    const { error } = await supabase.from("planta").insert(data);
+    if (error) {
+      console.error("Error adding planta:", error);
+    } else {
+      fetchPlanta(); // Refresh after adding
+    }
+  };
+
+  const addPlantación = async (data: any) => {
+    if (!session) return;
+    const { error } = await supabase.from("plantación").insert(data);
+    if (error) {
+      console.error("Error adding plantación:", error);
+    } else {
+      fetchPlantación(); // Refresh after adding
     }
   };
 
@@ -142,6 +222,39 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const updateTarea = async (id: number, data: any) => {
+    if (!session) return;
+    const { error } = await supabase.from("tarea").update(data).eq("id", id);
+    if (error) {
+      console.error("Error updating material:", error);
+    } else {
+      fetchTareas(); // Refresh after updating
+    }
+  };
+
+  const updatePlanta = async (id: number, data: any) => {
+    if (!session) return;
+    const { error } = await supabase.from("planta").update(data).eq("id", id);
+    if (error) {
+      console.error("Error updating planta:", error);
+    } else {
+      fetchPlanta(); // Refresh after updating
+    }
+  };
+
+  const updatePlantación = async (id: number, data: any) => {
+    if (!session) return;
+    const { error } = await supabase
+      .from("plantación")
+      .update(data)
+      .eq("id", id);
+    if (error) {
+      console.error("Error updating plantación:", error);
+    } else {
+      fetchPlanta(); // Refresh after updating
+    }
+  };
+
   // Delete Functions
   const deleteSemilla = async (id: number) => {
     if (!session) return;
@@ -173,24 +286,69 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const deleteTarea = async (id: number) => {
+    if (!session) return;
+    const { error } = await supabase.from("tarea").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting tarea:", error);
+    } else {
+      fetchTareas(); // Refresh after deleting
+    }
+  };
+
+  const deletePlanta = async (id: number) => {
+    if (!session) return;
+    const { error } = await supabase.from("planta").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting planta:", error);
+    } else {
+      fetchPlanta(); // Refresh after deleting
+    }
+  };
+
+  const deletePlantación = async (id: number) => {
+    if (!session) return;
+    const { error } = await supabase.from("plantación").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting plantación:", error);
+    } else {
+      fetchPlantación(); // Refresh after deleting
+    }
+  };
+
   return (
     <SupabaseDataContext.Provider
       value={{
         semillas,
         químicos,
         materiales,
+        tareas,
+        plantas,
+        plantación,
         fetchSemillas,
         fetchQuímicos,
         fetchMateriales,
+        fetchTareas,
+        fetchPlanta,
+        fetchPlantación,
         addSemilla,
         addQuímico,
         addMaterial,
+        addTarea,
+        addPlanta,
+        addPlantación,
         updateSemilla,
         updateQuímico,
         updateMaterial,
+        updateTarea,
+        updatePlanta,
+        updatePlantación,
         deleteSemilla,
         deleteQuímico,
         deleteMaterial,
+        deleteTarea,
+        deletePlanta,
+        deletePlantación,
       }}
     >
       {children}

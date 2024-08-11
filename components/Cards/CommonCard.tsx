@@ -1,89 +1,39 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from "react-native";
+import React, { useEffect } from "react";
+import { styles } from "@/constants/styles";
+import { useSupabaseData } from "@/context/supabseDataContext";
+import { formatearFecha } from "@/constants/Utils";
 
-// Definir la interfaz del objeto
-interface DataObject {
-  [key: string]: string | number | Date | any[];
-}
 
-// Definir la interfaz de las props
-interface CardProps {
-  dataArray: DataObject[];
-}
-
-const renderValue = (key: string, value: any) => {
-  if (typeof value === 'string') {
-    return <Text key={key} style={styles.text}>{key}: {value}</Text>;
-  }
-  if (typeof value === 'number') {
-    return <Text key={key} style={styles.text}>{key}: {value}</Text>;
-  }
-  if (value instanceof Date) {
-    return <Text key={key} style={styles.text}>{key}: {value.toDateString()}</Text>;
-  }
-  if (Array.isArray(value)) {
-    return (
-      <View key={key} style={styles.arrayContainer}>
-        <Text style={styles.text}>{key}:</Text>
-        {value.map((item, index) => (
-          <Text key={`${key}-${index}`} style={styles.text}>- {item}</Text>
-        ))}
-      </View>
-    );
-  }
-  return null;
-};
-
-const DataCard: React.FC<{ data: DataObject }> = ({ data }) => {
+const CommonCard = ({ item }: any) => {
+  const clavesExcluidas = ["id_semilla", "id_especie", "id_procedencia", "id_tarea", "id_categoría", "id_etiqueta","id_plantación", "created_at"];
   return (
-    <View style={styles.card}>
-      {Object.keys(data).map(key => renderValue(key, data[key]))}
+    <View style={styles.CardStyle}>
+      {Object.entries(item)
+        .filter(([clave]) => !clavesExcluidas.includes(clave))
+        .map(([clave, valor]) => {
+          // Aplicar formateo de fecha solo en las claves que corresponden a fechas
+          if (clave.includes("fecha")) {
+            valor = formatearFecha(valor);
+          }
+
+          if (typeof valor === "object" && valor !== null) {
+            return Object.entries(valor).map(([subClave, subValor]) => (
+              <Text key={`${clave}_${subClave}`} style={styles.CardTitleText}>
+                {subClave}:{" "}
+                <Text style={styles.CardDescriptionText}>{subValor}</Text>
+              </Text>
+            ));
+          } else {
+            return (
+              <Text key={clave} style={styles.CardTitleText}>
+                {clave}: <Text style={styles.CardDescriptionText}>{valor}</Text>
+              </Text>
+            );
+          }
+        })}
     </View>
   );
 };
-
-
-/**
- * Este componente se usa para renderizar cards que no requieran de 
- * llamadas a otras tablas para mostrar la totalidad de los datos
- * ej: materiales
- * @param dataArray
- * @returns Componente de react native
- */
-
-const CommonCard: React.FC<CardProps> = ({ dataArray }) => {
-  return (
-    <View style={styles.container}>
-      {dataArray.map((data, index) => (
-        <DataCard key={index} data={data} />
-      ))}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  card: {
-    backgroundColor: '#fff',
-    padding: 20,
-    margin: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  arrayContainer: {
-    marginBottom: 10,
-  },
-});
 
 export default CommonCard;
