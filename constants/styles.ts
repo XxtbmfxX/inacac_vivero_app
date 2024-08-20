@@ -1,10 +1,20 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%"
+  },
+
   safeViewStyle: {
     flex: 1,
     gap: 20,
     width: "100%",
+    paddingTop: 50,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -45,18 +55,18 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
 
-  input: {
-    borderColor: "#ccc",
-    borderWidth: 1,
+  button: {
     padding: 10,
-    marginBottom: 5,
+    backgroundColor: "#007bff",
+    borderRadius: 5,
+    marginTop: 10,
   },
-  inputError: {
-    borderColor: "red",
+
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
   },
-  errorText: {
-    color: "red",
-  },
+
   linkText: {
     color: "blue",
     textAlign: "center",

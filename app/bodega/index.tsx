@@ -15,6 +15,7 @@ const bodega = () => {
       <View style={styles.container}>
         <View style={styles.column}>
           <NavButton título="Semillas" screen={"/bodega/semillas"} />
+          <NavButton título="Ingresar Semillas" screen={"/bodega/semillas/ingresarSemillas"} />
           <NavButton título="Plantas" screen={"/bodega/plantas"} />
           <NavButton título="Plantación" screen={"/bodega/plantacion"} />
         </View>

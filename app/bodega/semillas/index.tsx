@@ -19,6 +19,9 @@ const index = () => {
       <Link href={"/bodega"}>
         <Text>Volver a Bodega</Text>
       </Link>
+      <Link href={"/bodega/semillas/ingresarSemillas"}>
+        <Text>Agregar Semillas</Text>
+      </Link>
       {semillas ? (
         <FlatList
           data={semillas}

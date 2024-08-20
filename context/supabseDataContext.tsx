@@ -4,35 +4,37 @@ import { useSupabase } from "@/context/supabaseAuthContext";
 
 type SupabaseDataContextProps = {
   semillas: any[];
-  químicos: any[];
-  materiales: any[];
-  tareas: any[];
-  plantas: any[];
-  plantación: any[];
   fetchSemillas: () => Promise<void>;
-  fetchQuímicos: () => Promise<void>;
-  fetchMateriales: () => Promise<void>;
-  fetchTareas: () => Promise<void>;
-  fetchPlanta: () => Promise<void>;
-  fetchPlantación: () => Promise<void>;
   addSemilla: (data: any) => Promise<void>;
-  addQuímico: (data: any) => Promise<void>;
-  addMaterial: (data: any) => Promise<void>;
-  addTarea: (data: any) => Promise<void>;
-  addPlanta: (data: any) => Promise<void>;
-  addPlantación: (data: any) => Promise<void>;
   updateSemilla: (id: number, data: any) => Promise<void>;
-  updateQuímico: (id: number, data: any) => Promise<void>;
-  updateMaterial: (id: number, data: any) => Promise<void>;
-  updateTarea: (id: number, data: any) => Promise<void>;
-  updatePlanta: (id: number, data: any) => Promise<void>;
-  updatePlantación: (id: number, data: any) => Promise<void>;
   deleteSemilla: (id: number) => Promise<void>;
+  químicos: any[];
+  fetchQuímicos: () => Promise<void>;
+  addQuímico: (data: any) => Promise<void>;
+  updateQuímico: (id: number, data: any) => Promise<void>;
   deleteQuímico: (id: number) => Promise<void>;
+  materiales: any[];
+  fetchMateriales: () => Promise<void>;
+  addMaterial: (data: any) => Promise<void>;
+  updateMaterial: (id: number, data: any) => Promise<void>;
   deleteMaterial: (id: number) => Promise<void>;
+  tareas: any[];
+  fetchTareas: () => Promise<void>;
+  addTarea: (data: any) => Promise<void>;
+  updateTarea: (id: number, data: any) => Promise<void>;
   deleteTarea: (id: number) => Promise<void>;
+  plantas: any[];
+  fetchPlanta: () => Promise<void>;
+  addPlanta: (data: any) => Promise<void>;
+  updatePlanta: (id: number, data: any) => Promise<void>;
   deletePlanta: (id: number) => Promise<void>;
+  plantación: any[];
+  fetchPlantación: () => Promise<void>;
+  addPlantación: (data: any) => Promise<void>;
+  updatePlantación: (id: number, data: any) => Promise<void>;
   deletePlantación: (id: number) => Promise<void>;
+  especies: any[];
+  fetchEspecies: () => Promise<void>;
 };
 
 const SupabaseDataContext = createContext<SupabaseDataContextProps | undefined>(
@@ -59,6 +61,19 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
   const [tareas, setTareas] = useState<any[]>([]);
   const [plantas, setPlantas] = useState<any[]>([]);
   const [plantación, setPlantación] = useState<any[]>([]);
+
+  const [especies, setEspecies] = useState<any[]>([]);
+
+
+  const fetchData = async (table: string, selectQuery: string) => {
+    const { data, error } = await supabase.from(table).select(selectQuery);
+    if (error) {
+      console.error(`Error fetching ${table}:`, error);
+      return [];
+    }
+    return data || [];
+  };
+  
 
   // Fetch Functions
   const fetchSemillas = async () => {
@@ -125,6 +140,16 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
       return;
     }
     setPlantación(data || []);
+  };
+
+  const fetchEspecies = async () => {
+    if (!session) return;
+    const { data, error } = await supabase.from("especie").select("*");
+    if (error) {
+      console.error("Error fetching tareas:", error);
+      return;
+    }
+    setEspecies(data || []);
   };
 
   // Add Functions
@@ -320,23 +345,31 @@ export const SupabaseDataProvider: React.FC<{ children: React.ReactNode }> = ({
     <SupabaseDataContext.Provider
       value={{
         semillas,
-        químicos,
-        materiales,
-        tareas,
-        plantas,
-        plantación,
         fetchSemillas,
-        fetchQuímicos,
-        fetchMateriales,
-        fetchTareas,
-        fetchPlanta,
-        fetchPlantación,
         addSemilla,
+        químicos,
+        fetchQuímicos,
         addQuímico,
+
+        materiales,
+        fetchMateriales,
         addMaterial,
+
+        tareas,
+        fetchTareas,
         addTarea,
+
+        plantas,
+        fetchPlanta,
         addPlanta,
+
+        plantación,
+        fetchPlantación,
         addPlantación,
+
+        especies,
+        fetchEspecies,
+
         updateSemilla,
         updateQuímico,
         updateMaterial,
