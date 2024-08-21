@@ -8,11 +8,18 @@ import LoadingScreen from "@/components/Animations/LoadingAnimation";
 import CommonCard from "@/components/Cards/CommonCard";
 
 const index = () => {
-  const { químicos, fetchQuímicos } = useSupabaseData();
+  const { químicos, procedencias, fetchData } = useSupabaseData();
 
   useEffect(() => {
-    fetchQuímicos();
+    fetchData("químico", [
+      "*",
+      "categoría (nombre_categoría)",
+      "etiqueta (color_etiqueta)",
+    ]);
+    fetchData("procedencia");
   }, []);
+
+  console.log(químicos);
 
   return (
     <SafeAreaView style={styles.safeViewStyle}>

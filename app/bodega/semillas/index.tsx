@@ -1,4 +1,4 @@
-import {  Text, FlatList } from "react-native";
+import { Text, FlatList } from "react-native";
 import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "@/constants/styles";
@@ -8,10 +8,13 @@ import LoadingScreen from "@/components/Animations/LoadingAnimation";
 import CommonCard from "@/components/Cards/CommonCard";
 
 const index = () => {
-  const { semillas, fetchSemillas } = useSupabaseData();
+  const { semillas, fetchData } = useSupabaseData();
 
   useEffect(() => {
-    fetchSemillas();
+    fetchData("semilla", [
+      "especie (nombre_especie)",
+      "procedencia (nombre_procedencia)",
+    ]);
   }, []);
 
   return (
@@ -23,11 +26,13 @@ const index = () => {
         <Text>Agregar Semillas</Text>
       </Link>
       {semillas ? (
-        <FlatList
-          data={semillas}
-          renderItem={({ item }) => <CommonCard item={item} />}
-          keyExtractor={(item) => item.id_semilla}
-        />
+        <>
+          <FlatList
+            data={semillas}
+            renderItem={({ item }) => <CommonCard item={item} />}
+            keyExtractor={(item) => item.id_semilla}
+          />
+        </>
       ) : (
         <LoadingScreen />
       )}

@@ -27,6 +27,7 @@ export interface PickerFieldProps {
   options: { label: string; value: number }[];
   error?: string;
   label: string 
+  valores: any
 }
 
 export interface DatePickerFieldProps {

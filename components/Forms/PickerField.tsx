@@ -7,7 +7,9 @@ import { Text } from '@rneui/themed';
 
 
 
-const PickerField: React.FC<PickerFieldProps> = ({ selectedValue, onValueChange, options, error, label }) => {
+const PickerField: React.FC<PickerFieldProps> = ({ selectedValue, onValueChange, options, error, label, valores }) => {
+
+
   return (
     <View>
       <Text h3 >{label}</Text>

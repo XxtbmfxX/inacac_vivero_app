@@ -10,35 +10,21 @@ import { FormValues } from "@/types/formTypes/interfaces";
 import { supabase } from "@/lib/supabase";
 import { formStyles } from "@/constants/formStyles";
 import { Text } from "@rneui/themed";
+import { useSupabaseData } from "@/context/supabseDataContext";
+import { Picker } from "@react-native-picker/picker";
 
 const SemillaForm: React.FC<{ initialValues?: FormValues }> = ({
   initialValues,
 }) => {
-  const [especies, setEspecies] = useState<
-    { id: number; nombre_especie: string }[]
-  >([]);
-  const [procedencias, setProcedencias] = useState<
-    { id: number; nombre_procedencia: string }[]
-  >([]);
+  const { especies, procedencias, fetchData } = useSupabaseData();
 
   useEffect(() => {
-    fetchEspecies();
-    fetchProcedencias();
+    // fetchData("especie");
+    fetchData("procedencia");
   }, []);
 
-  const fetchEspecies = async () => {
-    const { data } = await supabase
-      .from("especie")
-      .select("id, nombre_especie");
-    setEspecies(data || []);
-  };
-
-  const fetchProcedencias = async () => {
-    const { data } = await supabase
-      .from("procedencia")
-      .select("id, nombre_procedencia");
-    setProcedencias(data || []);
-  };
+  console.log(especies)
+  console.log(procedencias)
 
   const defaultValues: FormValues = {
     cantidad: 0,
@@ -59,11 +45,11 @@ const SemillaForm: React.FC<{ initialValues?: FormValues }> = ({
     actions: FormikHelpers<FormValues>
   ) => {
     try {
-      const { error } = await supabase
-        .from("semilla")
-        .upsert(values, { onConflict: "id" });
-      if (error) throw error;
-
+      // const { error } = await supabase
+      //   .from("semilla")
+      //   .upsert(values, { onConflict: "id" });
+      // if (error) throw error;
+      console.log(values);
       actions.resetForm();
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
@@ -79,18 +65,21 @@ const SemillaForm: React.FC<{ initialValues?: FormValues }> = ({
         onSubmit={handleSubmit}
       >
         {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
-          <ScrollView automaticallyAdjustKeyboardInsets contentContainerStyle={styles.scrollContainer}>
+          <ScrollView
+            automaticallyAdjustKeyboardInsets
+            contentContainerStyle={styles.scrollContainer}
+          >
             <View style={formStyles.formContainer}>
-              <TextInputField
+              {/* <TextInputField
                 label="Cantidad"
                 placeholder="Cantidad"
                 value={String(values.cantidad)}
                 error={errors.cantidad}
                 onChangeText={handleChange("cantidad")}
                 keyboardType="numeric"
-              />
+              /> */}
 
-              <DatePickerField
+              {/* <DatePickerField
                 value={values.fecha_recepcion || new Date()}
                 onChange={(event, selectedDate) => {
                   const currentDate = selectedDate || values.fecha_recepcion;
@@ -152,41 +141,32 @@ const SemillaForm: React.FC<{ initialValues?: FormValues }> = ({
                 value={values.condicion_semilla}
                 error={errors.condicion_semilla}
                 onChangeText={handleChange("condicion_semilla")}
-              />
+              /> */}
 
-              <PickerField
-                label="Especie"
+              {/* <Picker
                 selectedValue={values.id_especie}
                 onValueChange={(itemValue) =>
                   setFieldValue("id_especie", itemValue)
                 }
-                options={especies.map((especie) => ({
-                  label: especie.nombre_especie,
-                  value: especie.id,
-                }))}
-                error={errors.id_especie}
-              />
+              >
+                {procedencias.map((procedencia) => (
+                  <Picker.Item
+                    key={procedencia.id_procedencia}
+                    label={procedencia.nombre_procedencia}
+                    value={procedencia.id_procedencia}
+                  />
+                ))}
+              </Picker> */}
 
-              <PickerField
-                label="Procedencia"
-                selectedValue={values.id_procedencia}
-                onValueChange={(itemValue) =>
-                  setFieldValue("id_procedencia", itemValue)
-                }
-                options={procedencias.map((procedencia) => ({
-                  label: procedencia.nombre_procedencia,
-                  value: procedencia.id,
-                }))}
-                error={errors.id_procedencia}
-              />
 
-              <TextInputField
+              {/* AGREGAR EL ERROR */}
+              {/* <TextInputField
                 label="RUT Colector"
                 placeholder="RUT Colector"
                 value={values.rut_colector}
                 error={errors.rut_colector}
                 onChangeText={handleChange("rut_colector")}
-              />
+              /> */}
 
               <Button title="Guardar" onPress={handleSubmit as any} />
             </View>
